@@ -13,6 +13,10 @@ module.exports = {
         primary: '#FFD370',
         black: '#333333',
       },
+      fontFamily: {
+        balooThambi: ['"Baloo Thambi 2"'],
+        noto: ['"Noto Sans TC"'],
+      },
     },
   },
   plugins: [],
