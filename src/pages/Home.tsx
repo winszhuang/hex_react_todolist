@@ -1,20 +1,21 @@
 import { useState } from 'react';
-import CheckImg from '../assets/check.png';
-import generateRandomId from '../genId';
-import TodoAdder from '../components/TodoAdder';
-import TodoTask from '../components/TodoTask';
 import { tabOptions } from '../constants/tab.const';
 import { TabEnum } from '../enums/tab.enum';
+import useTodoList from '../hooks/useTodoList';
+import CheckImg from '../assets/check.png';
+import TodoAdder from '../components/TodoAdder';
+import TodoTask from '../components/TodoTask';
 
 function Home() {
   const [currentTab, setCurrentTab] = useState(tabOptions[0].value);
-  const [todoList, setTodoList] = useState<TaskData[]>([
-    { 
-      content: '把冰箱發霉的檸檬拿去丟', 
-      isDone: false, 
-      id: generateRandomId() 
-    }
-  ]);
+  const {
+    todoList,
+    toggleIsDone,
+    removeTask,
+    clearDone,
+    addTask
+  } = useTodoList();
+  
   const filterTodoList = () => {
     const strategy = {
       [TabEnum.All]: (item: TaskData) => item,
@@ -24,36 +25,10 @@ function Home() {
 
     return todoList.filter(strategy[currentTab])
   }
+
   const captionText = currentTab === TabEnum.Todo
       ? `${todoList.filter(item => !item.isDone).length}個未完成項目`
       : `${todoList.filter(item => item.isDone).length}個已完成項目`;
-
-  function toggleIsDone(id: string) {
-    setTodoList((prev) => {
-      const copy = [...prev].map(item => ({ ...item }));
-      const item = copy.find(item => item.id === id);
-      if (!item) return prev;
-      item.isDone = !item.isDone;
-      return copy
-    })
-  }
-
-  function removeTask(id: string) {
-    setTodoList((prev) => prev.filter(item => item.id !== id))
-  }
-  
-  function clearDone() {
-    setTodoList((prev) => prev.filter(item => !item.isDone))
-  }
-
-  function addTask(content: string) {
-    setTodoList((prev) => 
-      [...prev, {
-        content,
-        id: generateRandomId(),
-        isDone: false
-      }])
-  }
 
   return (
     <div className="h-screen px-8 text-grey-3 bg-primary font-noto">
