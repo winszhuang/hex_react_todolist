@@ -40,7 +40,7 @@ function SignUp() {
           type="password"
         />
         <div className="text-center">
-          <button type="button" className="px-12 py-3 mb-4 text-white bg-black rounded ">
+          <button type="button" className="px-12 py-3 mb-4 text-white rounded bg-grey-3 ">
             註冊帳號
           </button>
           <br />
@@ -78,7 +78,7 @@ function SignUp() {
     //       type="password"
     //     />
     //     <div className="text-center">
-    //       <button type="button" className="px-12 py-3 mb-4 text-white bg-black rounded ">
+    //       <button type="button" className="px-12 py-3 mb-4 text-white rounded bg-grey-3 ">
     //         註冊
     //       </button>
     //       <br />

@@ -4,7 +4,7 @@ import CheckImg from '../assets/check.png';
 
 export function Entrance() {
   return (
-    <div className="flex h-screen px-8 text-black md:px-28 bg-primary font-noto">
+    <div className="flex h-screen px-8 text-grey-3 md:px-28 bg-primary font-noto">
       <div className="items-center justify-center hidden md:w-1/2 md:flex">
         <div className="flex flex-col items-center">
           <section className="flex items-center">

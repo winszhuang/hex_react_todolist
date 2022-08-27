@@ -11,7 +11,11 @@ module.exports = {
     extend: {
       colors: {
         primary: '#FFD370',
-        black: '#333333',
+        grey: {
+          1: '#EFEFEF',
+          2: '#9F9A91',
+          3: '#333333'
+        },
       },
       fontFamily: {
         balooThambi: ['"Baloo Thambi 2"'],

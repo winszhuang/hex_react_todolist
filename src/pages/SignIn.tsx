@@ -1,8 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import TextInputter from '../components/TextInputer';
 import CheckImg from '../assets/check.png';
 
 function SignIn() {
+  const navigate = useNavigate();
+
+  function signIn() {
+    navigate('/home');
+  }
+
   return (
     <div className="flex flex-col md:w-80">
       <section className="flex items-center md:hidden mb-[22px]">
@@ -26,7 +32,11 @@ function SignIn() {
           type="password"
         />
         <div className="text-center">
-          <button type="button" className="px-12 py-3 mb-4 text-white bg-black rounded ">
+          <button
+            type="button"
+            className="px-12 py-3 mb-4 text-white rounded bg-grey-3"
+            onClick={signIn}
+          >
             登入
           </button>
           <br />
