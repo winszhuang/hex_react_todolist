@@ -28,7 +28,9 @@ function TodoTask({ task, toggleIsDone, removeTask }: TodoTaskProps) {
                 onClick={toggleIsDone}
               />
         }
-        <span className="text-sm">{ task.content }</span>
+        <span className={'text-sm ' + (task.isDone ? 'text-grey-2 line-through' : 'text-grey-3')}>
+          { task.content }
+        </span>
       </div>
       <img
         onClick={removeTask}
