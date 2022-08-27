@@ -16,15 +16,11 @@ function Home() {
     addTask
   } = useTodoList();
   
-  const filterTodoList = () => {
-    const strategy = {
-      [TabEnum.All]: (item: TaskData) => item,
-      [TabEnum.Todo]: (item: TaskData) => !item.isDone,
-      [TabEnum.Done]: (item: TaskData) => item.isDone
-    }
-
-    return todoList.filter(strategy[currentTab])
-  }
+  const filterTodoList = todoList.filter({
+    [TabEnum.All]: (item: TaskData) => item,
+    [TabEnum.Todo]: (item: TaskData) => !item.isDone,
+    [TabEnum.Done]: (item: TaskData) => item.isDone
+  }[currentTab])
 
   const captionText = currentTab === TabEnum.Todo
       ? `${todoList.filter(item => !item.isDone).length}個未完成項目`
@@ -65,14 +61,17 @@ function Home() {
           </ul>
           <ul className="p-6 pr-4 space-y-4">
             {
-              filterTodoList().map((item) => (
-                <TodoTask
-                  key={item.id}
-                  toggleIsDone={() => toggleIsDone(item.id)}
-                  removeTask={() => removeTask(item.id)}
-                  task={item}
-                />
-              ))
+              filterTodoList.length
+                ? filterTodoList.map((item) => (
+                    <TodoTask
+                      key={item.id}
+                      toggleIsDone={() => toggleIsDone(item.id)}
+                      removeTask={() => removeTask(item.id)}
+                      task={item}
+                    />
+                  ))
+                : 
+              <div className='pb-4 leading-5 text-center border-b border-b-slate-200'>該區域無事項</div>
             }
           </ul>
           <div className='flex justify-between pb-6 pl-6 pr-4 text-sm'>
