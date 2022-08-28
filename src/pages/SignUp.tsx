@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import BaseForm from '../components/BaseForm';
 import BaseInput from '../components/BaseInput'
 import CheckImg from '../assets/check.png';
@@ -6,19 +6,21 @@ import { apiSignUp } from '../apis/users';
 import { emailValidation, minLengthValidation } from '../validation/validation'
 
 function SignUp() {
+  const navigate = useNavigate();
+
   async function onSubmit(data: SignUpFormValues) {
     const { email, password, nickname } = data;
     try {
-      const source = await apiSignUp({
+      await apiSignUp({
         user: {
           email,
           password,
           nickname
         }
       });
-      console.log(source)
+      navigate('/home');
     } catch (error) {
-      console.error((error as Error).message);
+      alert('輸入內容錯誤');
     }
   }
 

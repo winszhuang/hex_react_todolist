@@ -12,15 +12,15 @@ function SignIn() {
     const { email, password } = data;
     
     try {
-      const source = await apiSignIn({
+      await apiSignIn({
         user: {
           email,
           password
         }
       });
-      console.log(source);
+      navigate('/home');
     } catch (error) {
-      console.error((error as Error).message);
+      alert('輸入內容錯誤');
     }
   }
 

@@ -7,8 +7,13 @@ export default function useLocalStorage() {
     return localStorage.getItem(key);
   }
 
+  function removeItem(key: string) {
+    localStorage.removeItem(key);
+  }
+
   return {
     setItem,
-    getItem
+    getItem,
+    removeItem
   }
 }

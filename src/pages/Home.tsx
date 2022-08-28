@@ -6,6 +6,8 @@ import CheckImg from '../assets/check.png';
 import TodoAdder from '../components/TodoAdder';
 import TodoTask from '../components/TodoTask';
 import { useNavigate } from 'react-router-dom';
+import { apiSignOut } from '../apis/users';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 function Home() {
   const navigate = useNavigate();
@@ -28,8 +30,14 @@ function Home() {
       ? `${todoList.filter(item => !item.isDone).length}個未完成項目`
       : `${todoList.filter(item => item.isDone).length}個已完成項目`;
 
-  function logout() {
-    navigate('/signin');
+  async function logout() {
+    try {
+      await apiSignOut();
+      useLocalStorage().removeItem('token');
+      navigate('/signin');
+    } catch (error) {
+      alert((error as Error).message)
+    }
   }
 
   return (
