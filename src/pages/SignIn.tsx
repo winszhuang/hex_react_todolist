@@ -18,7 +18,7 @@ function SignIn() {
           password
         }
       });
-      navigate('/home');
+      navigate('/');
     } catch (error) {
       alert('輸入內容錯誤');
     }
