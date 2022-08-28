@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { apiSignOut } from '../apis/users';
 import useLocalStorage from '../hooks/useLocalStorage';
 
-function Home() {
+function Main() {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(tabOptions[0].value);
   const {
@@ -100,4 +100,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Main;
