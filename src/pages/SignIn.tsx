@@ -1,12 +1,27 @@
 import { Link, useNavigate } from 'react-router-dom';
-import TextInputter from '../components/TextInputer';
 import CheckImg from '../assets/check.png';
+import { apiSignIn } from '../apis/users';
+import BaseForm from '../components/BaseForm';
+import BaseInput from '../components/BaseInput';
+import { emailValidation, minLengthValidation } from '../validation/validation';
 
 function SignIn() {
   const navigate = useNavigate();
 
-  function signIn() {
-    navigate('/home');
+  async function onSubmit(data: SignInFormValues) {
+    const { email, password } = data;
+    
+    try {
+      const source = await apiSignIn({
+        user: {
+          email,
+          password
+        }
+      });
+      console.log(source);
+    } catch (error) {
+      console.error((error as Error).message);
+    }
   }
 
   return (
@@ -20,22 +35,25 @@ function SignIn() {
       <h2 className="mb-8 text-xl font-bold md:mb-6 md:text-2xl">
         最實用的線上代辦事項服務
       </h2>
-      <form action="#" method="POST" className="w-full">
-        <TextInputter
+
+      <BaseForm<SignInFormValues> onSubmit={onSubmit}>
+        <BaseInput
           label="Email"
           placeHolder="請輸入Email"
-          type="text"
+          name='email'
+          registerOptions={{ ...emailValidation }}
         />
-        <TextInputter
+        <BaseInput
           label="密碼"
           placeHolder="請輸入密碼"
           type="password"
+          name='password'
+          registerOptions={minLengthValidation(2)}
         />
         <div className="text-center">
           <button
-            type="button"
+            type="submit"
             className="px-12 py-3 mb-4 text-white rounded bg-grey-3"
-            onClick={signIn}
           >
             登入
           </button>
@@ -46,7 +64,7 @@ function SignIn() {
             </span>
           </Link>
         </div>
-      </form>
+      </BaseForm>
     </div>
   );
 }

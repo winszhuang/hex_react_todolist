@@ -5,8 +5,10 @@ import useTodoList from '../hooks/useTodoList';
 import CheckImg from '../assets/check.png';
 import TodoAdder from '../components/TodoAdder';
 import TodoTask from '../components/TodoTask';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
+  const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(tabOptions[0].value);
   const {
     todoList,
@@ -26,6 +28,10 @@ function Home() {
       ? `${todoList.filter(item => !item.isDone).length}個未完成項目`
       : `${todoList.filter(item => item.isDone).length}個已完成項目`;
 
+  function logout() {
+    navigate('/signin');
+  }
+
   return (
     <div className="h-screen px-8 text-grey-3 bg-primary font-noto">
       <header className="flex items-center   pt-[18px] pb-10">
@@ -36,7 +42,7 @@ function Home() {
         <span className="mr-6 cursor-pointer">
           王小明的代辦
         </span>
-        <span className="cursor-pointer">
+        <span className="cursor-pointer" onClick={logout}>
           登出
         </span>
       </header>
