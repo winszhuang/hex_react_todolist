@@ -15,7 +15,7 @@ function TodoTask({ task, toggleIsDone, removeTask }: TodoTaskProps) {
     >
       <div className='flex flex-1 pb-4 border-b border-b-slate-200'>
         {
-          task.isDone
+          task.completed_at
             ? <img 
                 src={CheckedIcon} 
                 alt="" 
@@ -28,7 +28,7 @@ function TodoTask({ task, toggleIsDone, removeTask }: TodoTaskProps) {
                 onClick={toggleIsDone}
               />
         }
-        <span className={'text-sm ' + (task.isDone ? 'text-grey-2 line-through' : 'text-grey-3')}>
+        <span className={'text-sm ' + (task.completed_at ? 'text-grey-2 line-through' : 'text-grey-3')}>
           { task.content }
         </span>
       </div>

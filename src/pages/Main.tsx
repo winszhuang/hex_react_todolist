@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { tabOptions } from '../constants/tab.const';
 import { TabEnum } from '../enums/tab.enum';
 import useTodoList from '../hooks/useTodoList';
@@ -8,27 +8,43 @@ import TodoTask from '../components/TodoTask';
 import { useNavigate } from 'react-router-dom';
 import { apiSignOut } from '../apis/users';
 import useLocalStorage from '../hooks/useLocalStorage';
+import { apiGetTodos } from '../apis/todos';
 
 function Main() {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(tabOptions[0].value);
   const {
     todoList,
+    setTodoList,
     toggleIsDone,
     removeTask,
     clearDone,
-    addTask
+    addTask,
+    refreshId
   } = useTodoList();
-  
+
   const filterTodoList = todoList.filter({
     [TabEnum.All]: (item: TaskData) => item,
-    [TabEnum.Todo]: (item: TaskData) => !item.isDone,
-    [TabEnum.Done]: (item: TaskData) => item.isDone
+    [TabEnum.Todo]: (item: TaskData) => !item.completed_at,
+    [TabEnum.Done]: (item: TaskData) => item.completed_at
   }[currentTab])
 
   const captionText = currentTab === TabEnum.Todo
-      ? `${todoList.filter(item => !item.isDone).length}個未完成項目`
-      : `${todoList.filter(item => item.isDone).length}個已完成項目`;
+      ? `${todoList.filter(item => !item.completed_at).length}個未完成項目`
+      : `${todoList.filter(item => item.completed_at).length}個已完成項目`;
+
+  async function fetchTodos() {
+    try {
+      const source = (await apiGetTodos()).data;
+      setTodoList(source.todos);
+    } catch (error) {
+      console.log((error as Error).message)
+    }
+  }
+
+  useEffect(() => {
+    fetchTodos();
+  }, [refreshId])
 
   async function logout() {
     try {

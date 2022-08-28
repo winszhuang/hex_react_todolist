@@ -17,5 +17,5 @@ export function apiDeleteTodos(id: string) {
 }
 
 export function apiToggleTodoIsDone(id: string) {
-  return useApi().patch(`/todos/${id}`);
+  return useApi().patch(`/todos/${id}/toggle`);
 }

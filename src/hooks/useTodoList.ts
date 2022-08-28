@@ -1,40 +1,53 @@
+import { AxiosResponse } from 'axios';
 import { useState } from 'react';
+import { apiDeleteTodos, apiPostTodos, apiToggleTodoIsDone } from '../apis/todos';
 import generateRandomId from '../genId';
 
 export default function useTodoList() {
-  const [todoList, setTodoList] = useState<TaskData[]>([
-    { 
-      content: '把冰箱發霉的檸檬拿去丟', 
-      isDone: false, 
-      id: generateRandomId() 
-    }
-  ]);
+  const [refreshId, setRefreshId] = useState('');
+  const [todoList, setTodoList] = useState<TaskData[]>([]);
 
-  function toggleIsDone(id: string) {
-    setTodoList((prev) => {
-      const copy = [...prev].map(item => ({ ...item }));
-      const item = copy.find(item => item.id === id);
-      if (!item) return prev;
-      item.isDone = !item.isDone;
-      return copy
-    })
+  async function toggleIsDone(id: string) {
+    try {
+      await apiToggleTodoIsDone(id);
+      setRefreshId(Date.now() + generateRandomId())
+    } catch (error) {
+      console.log((error as Error).message)
+    }
   }
 
-  function removeTask(id: string) {
-    setTodoList((prev) => prev.filter(item => item.id !== id))
+  async function removeTask(id: string) {
+    try {
+      await apiDeleteTodos(id)
+      setRefreshId(Date.now() + generateRandomId())
+    } catch (error) {
+      console.log((error as Error).message)
+    }
   }
   
-  function clearDone() {
-    setTodoList((prev) => prev.filter(item => !item.isDone))
+  async function clearDone() {
+    try {
+      const promiseStack = todoList
+        .filter(item => item.completed_at!!)
+        .reduce((prev, curr) => {
+          prev.push(apiDeleteTodos(curr.id))
+          return prev;
+        }, [] as Array<Promise<AxiosResponse<any, any>>>);
+  
+      await Promise.all(promiseStack);
+      setRefreshId(Date.now() + generateRandomId())
+    } catch (error) {
+      console.log((error as Error).message)
+    }
   }
 
-  function addTask(content: string) {
-    setTodoList((prev) => 
-      [...prev, {
-        content,
-        id: generateRandomId(),
-        isDone: false
-      }])
+  async function addTask(content: string) {
+    try {
+      await apiPostTodos({ todo: { content } })
+      setRefreshId(Date.now() + generateRandomId())
+    } catch (error) {
+      console.log((error as Error).message)
+    }
   }
 
   return {
@@ -42,6 +55,8 @@ export default function useTodoList() {
     toggleIsDone,
     removeTask,
     clearDone,
-    addTask
+    addTask,
+    setTodoList,
+    refreshId
   }
 }

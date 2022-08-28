@@ -1,7 +1,7 @@
 interface TaskData {
   content: string,
   id: string,
-  isDone: boolean
+  completed_at: null | undefined | string
 }
 
 interface SignInFormValues {
