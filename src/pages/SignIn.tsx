@@ -4,6 +4,7 @@ import { apiSignIn } from '../apis/users';
 import BaseForm from '../components/BaseForm';
 import BaseInput from '../components/BaseInput';
 import { emailValidation, minLengthValidation } from '../validation/validation';
+import { AxiosError } from 'axios';
 
 function SignIn() {
   const navigate = useNavigate();
@@ -20,7 +21,12 @@ function SignIn() {
       });
       navigate('/');
     } catch (error) {
-      alert('輸入內容錯誤');
+      const errorData = (error as AxiosError).response?.data as ErrorData;
+      if (errorData && errorData.error) {
+        alert(errorData.error[0]);
+      } else {
+        alert(errorData.message);
+      }
     }
   }
 

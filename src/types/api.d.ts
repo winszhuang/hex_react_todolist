@@ -17,3 +17,8 @@ interface TodoData {
     content: string
   }
 }
+
+interface ErrorData {
+  error: string[],
+  message: string
+}

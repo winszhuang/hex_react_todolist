@@ -4,6 +4,7 @@ import BaseInput from '../components/BaseInput'
 import CheckImg from '../assets/check.png';
 import { apiSignUp } from '../apis/users';
 import { emailValidation, minLengthValidation } from '../validation/validation'
+import { AxiosError } from 'axios';
 
 function SignUp() {
   const navigate = useNavigate();
@@ -20,7 +21,12 @@ function SignUp() {
       });
       navigate('/');
     } catch (error) {
-      alert('輸入內容錯誤');
+      const errorData = (error as AxiosError).response?.data as ErrorData;
+      if (errorData && errorData.error) {
+        alert(errorData.error[0]);
+      } else {
+        alert('輸入內容錯誤');
+      }
     }
   }
 

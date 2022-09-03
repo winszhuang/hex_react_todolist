@@ -2,6 +2,7 @@ import useLocalStorage from '../hooks/useLocalStorage';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { apiCheckAuthorization } from '../apis/test';
+import { AxiosError } from 'axios';
 
 export default function RouteGuard() {
   const location = useLocation();
@@ -22,10 +23,14 @@ export default function RouteGuard() {
       setToken(localToken);
     } catch (error) {
       useLocalStorage().removeItem('token');
-      if (!location.pathname.match(/^\/sign(in|up)/i)) {
-        alert((error as Error).message);
-        navigate('/signIn');
+      if (location.pathname.match(/^\/sign(in|up)/i)) return;
+      const errorData = (error as AxiosError).response?.data as ErrorData;
+      if (errorData && errorData.error) {
+        alert(errorData.error[0]);
+      } else {
+        alert(errorData.message);
       }
+      navigate('/signIn');
     }
   }
 
